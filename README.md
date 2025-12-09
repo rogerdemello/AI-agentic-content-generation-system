@@ -47,8 +47,8 @@ This system demonstrates production-grade agentic architecture for transforming 
 ### Installation
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd kasparro-ai-agentic-content-generation-system
+git clone https://github.com/rogerdemello/kasparro-ai-agentic-content-generation-system-roger-demello.git
+cd kasparro-ai-agentic-content-generation-system-roger-demello
 
 # No pip install needed - uses standard library only
 ```

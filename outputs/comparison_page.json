@@ -1,0 +1,59 @@
+{
+  "page_type": "comparison",
+  "products": {
+    "product_a": {
+      "name": "GlowBoost Vitamin C Serum",
+      "price": "₹699",
+      "key_spec": "10% Vitamin C",
+      "suitable_for": "Oily, Combination"
+    },
+    "product_b": {
+      "name": "RadiantGlow Vitamin C Essence",
+      "price": "₹899",
+      "key_spec": "15% Vitamin C",
+      "suitable_for": "All skin types"
+    }
+  },
+  "comparisons": {
+    "ingredients": {
+      "common_ingredients": [
+        "Vitamin C"
+      ],
+      "unique_to_a": [
+        "Hyaluronic Acid"
+      ],
+      "unique_to_b": [
+        "Vitamin E",
+        "Ferulic Acid"
+      ],
+      "summary": "1 common components, 1 unique to GlowBoost Vitamin C Serum, 2 unique to RadiantGlow Vitamin C Essence"
+    },
+    "benefits": {
+      "common_benefits": [
+        "Brightening"
+      ],
+      "unique_to_a": [
+        "Fades dark spots"
+      ],
+      "unique_to_b": [
+        "Anti-aging",
+        "Antioxidant protection"
+      ],
+      "advantage_a": "GlowBoost Vitamin C Serum additionally provides: Fades dark spots",
+      "advantage_b": "RadiantGlow Vitamin C Essence additionally provides: Anti-aging, Antioxidant protection"
+    },
+    "pricing": {
+      "GlowBoost Vitamin C Serum_price": "₹699",
+      "RadiantGlow Vitamin C Essence_price": "₹899",
+      "comparison": "GlowBoost Vitamin C Serum is priced at ₹699 while RadiantGlow Vitamin C Essence is priced at ₹899"
+    }
+  },
+  "metadata": {
+    "generated_from": "Comparison Page Template",
+    "comparison_categories": [
+      "ingredients",
+      "benefits",
+      "pricing"
+    ]
+  }
+}

@@ -1,3 +1,5 @@
 # No external dependencies required
 # This system uses only Python standard library
 # Python 3.8+
+
+# Vercel requires at least one package in requirements.txt

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Content Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .main-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .example-link {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        
+        .example-link:hover {
+            color: #764ba2;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .results {
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .result-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .download-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .download-btn:hover {
+            background: #764ba2;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .error {
+            background: #fee;
+            border-left: 4px solid #f44;
+            padding: 15px;
+            border-radius: 6px;
+            color: #c33;
+            margin-bottom: 20px;
+        }
+        
+        .success-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Agentic Content Generator</h1>
+            <p>Multi-agent system for automated content generation from product data</p>
+        </div>
+        
+        <div class="main-card">
+            <h2 class="section-title">Product Data Input</h2>
+            
+            <div class="input-section">
+                <label for="productA">
+                    Product A (Required)
+                    <span class="example-link" onclick="loadExample('A')">Load Example</span>
+                </label>
+                <textarea id="productA" placeholder='Paste your product JSON here...'></textarea>
+            </div>
+            
+            <div class="input-section">
+                <label for="productB">
+                    Product B (Optional - for comparison)
+                    <span class="example-link" onclick="loadExample('B')">Load Example</span>
+                </label>
+                <textarea id="productB" placeholder='Optional: Paste Product B JSON for comparison page...'></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="generateContent()" id="generateBtn">
+                    Generate Content
+                </button>
+                <button class="btn-secondary" onclick="clearInputs()">
+                    Clear All
+                </button>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Executing multi-agent pipeline...</p>
+            </div>
+            
+            <div id="error" style="display: none;"></div>
+        </div>
+        
+        <div id="results" class="results">
+            <div class="main-card">
+                <h2 class="section-title">
+                    Generated Content
+                    <span class="success-badge">✓ Success</span>
+                </h2>
+                
+                <div class="result-card">
+                    <h3>
+                        FAQ Page
+                        <button class="download-btn" onclick="downloadJSON('faq')">Download JSON</button>
+                    </h3>
+                    <pre id="faq-output"></pre>
+                </div>
+                
+                <div class="result-card">
+                    <h3>
+                        Product Page
+                        <button class="download-btn" onclick="downloadJSON('product')">Download JSON</button>
+                    </h3>
+                    <pre id="product-output"></pre>
+                </div>
+                
+                <div id="comparison-card" class="result-card" style="display: none;">
+                    <h3>
+                        Comparison Page
+                        <button class="download-btn" onclick="downloadJSON('comparison')">Download JSON</button>
+                    </h3>
+                    <pre id="comparison-output"></pre>
+                </div>
+                
+                <div style="margin-top: 20px; color: #666; font-size: 14px;">
+                    <strong>Agents Executed:</strong> <span id="agents-list"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedData = {};
+        
+        const exampleProductA = {
+            "product_name": "GlowBoost Vitamin C Serum",
+            "concentration": "10% Vitamin C",
+            "suitable_for": "Oily, Combination",
+            "key_ingredients": ["Vitamin C", "Hyaluronic Acid"],
+            "benefits": ["Brightening", "Fades dark spots"],
+            "how_to_use": "Apply 2–3 drops in the morning before sunscreen",
+            "side_effects": "Mild tingling for sensitive skin",
+            "price": "₹699"
+        };
+        
+        const exampleProductB = {
+            "product_name": "RadiantGlow Vitamin C Essence",
+            "concentration": "15% Vitamin C",
+            "suitable_for": "All skin types",
+            "key_ingredients": ["Vitamin C", "Ferulic Acid", "Vitamin E"],
+            "benefits": ["Brightening", "Anti-aging", "Antioxidant protection"],
+            "how_to_use": "Apply 3-4 drops in the evening after cleansing",
+            "side_effects": "May cause redness for very sensitive skin",
+            "price": "₹899"
+        };
+        
+        function loadExample(product) {
+            const example = product === 'A' ? exampleProductA : exampleProductB;
+            const textarea = document.getElementById(product === 'A' ? 'productA' : 'productB');
+            textarea.value = JSON.stringify(example, null, 2);
+        }
+        
+        function clearInputs() {
+            document.getElementById('productA').value = '';
+            document.getElementById('productB').value = '';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('error').style.display = 'none';
+        }
+        
+        async function generateContent() {
+            const productAText = document.getElementById('productA').value.trim();
+            const productBText = document.getElementById('productB').value.trim();
+            
+            if (!productAText) {
+                showError('Please provide Product A data');
+                return;
+            }
+            
+            let productA, productB;
+            
+            try {
+                productA = JSON.parse(productAText);
+            } catch (e) {
+                showError('Invalid JSON for Product A: ' + e.message);
+                return;
+            }
+            
+            if (productBText) {
+                try {
+                    productB = JSON.parse(productBText);
+                } catch (e) {
+                    showError('Invalid JSON for Product B: ' + e.message);
+                    return;
+                }
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('results').classList.remove('show');
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        product_a: productA,
+                        product_b: productB || null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Generation failed');
+                }
+                
+                displayResults(data);
+                
+            } catch (error) {
+                showError('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+        
+        function displayResults(data) {
+            generatedData = data.outputs;
+            
+            document.getElementById('faq-output').textContent = JSON.stringify(data.outputs.faq, null, 2);
+            document.getElementById('product-output').textContent = JSON.stringify(data.outputs.product, null, 2);
+            
+            if (data.outputs.comparison) {
+                document.getElementById('comparison-output').textContent = JSON.stringify(data.outputs.comparison, null, 2);
+                document.getElementById('comparison-card').style.display = 'block';
+            } else {
+                document.getElementById('comparison-card').style.display = 'none';
+            }
+            
+            document.getElementById('agents-list').textContent = data.agents_executed.join(', ');
+            document.getElementById('results').classList.add('show');
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function downloadJSON(type) {
+            const data = generatedData[type];
+            if (!data) return;
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${type}_page.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

@@ -8,7 +8,7 @@ def main():
     """Execute the complete content generation pipeline"""
     
     print("=" * 60)
-    print("Kasparro AI Agentic Content Generation System")
+    print("AI Agentic Content Generation System")
     print("=" * 60)
     
     # Initialize orchestrator

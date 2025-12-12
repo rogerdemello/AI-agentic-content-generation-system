@@ -1,4 +1,4 @@
-# 2-Day Roadmap: Kasparro Agentic Content Generation System
+# 2-Day Roadmap: Agentic Content Generation System
 
 ## Day 1: System Design & Core Implementation
 

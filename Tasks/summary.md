@@ -1,4 +1,4 @@
-# Kasparro Applied AI Engineer Challenge: Multi-Agent Content Generation System
+# Applied AI Engineer Challenge: Multi-Agent Content Generation System
 
 ## 🎯 Objective
 Design and implement a modular agentic automation system that takes a small product dataset and automatically generates structured, machine-readable content pages. The focus is on engineering and design ability, not domain expertise.
@@ -49,7 +49,7 @@ Concentration: 99.7% HEPA Filtration Efficiency
 - **Machine-Readable Output**: All pages as JSON.
 
 ## 📁 Repository Requirements
-- GitHub repo: `kasparro-ai-agentic-content-generation-system-<first_name-last_name>`
+- GitHub repo: `ai-agentic-content-generation-system-<first_name-last_name>`
 - Must include `docs/projectdocumentation.md` with:
   - Problem Statement
   - Solution Overview
@@ -67,11 +67,11 @@ Concentration: 99.7% HEPA Filtration Efficiency
 4. **Data & Output Structure (10%)**: JSON correctness, clean mapping from data to output.
 
 ## 🧠 Purpose
-Measures ability to design production-style agentic systems as built at Kasparro.
+Measures ability to design production-style agentic systems.
 
 ---
 
-# What You Can Expect at Kasparro — The Engineering Environment & Learning Curve
+# What You Can Expect — The Engineering Environment & Learning Curve
 
 - **Steep learning curve, high expectations, unmatched growth.**
 - **Real engineering from day one**: Not shallow intern work.
@@ -93,6 +93,6 @@ Measures ability to design production-style agentic systems as built at Kasparro
 ### 5. Master the craft of building with AI
 - Use AI as an engineering multiplier for design, implementation, testing, and iteration.
 
-**Kasparro is a place for driven people to grow extremely fast.**
+**This is a place for driven people to grow extremely fast.**
 - Fast pace, high standards, complex systems.
 - Interns are expected to rise to the challenge and become high-level engineers.

@@ -1,120 +1,183 @@
-# Kasparro AI Agentic Content Generation System
+# Agentic Content Generator
 
-A modular multi-agent system for automated content generation from product data.
+A modular, agent-based system that generates structured content (FAQ, product pages, and comparisons) from product JSON data.
 
 ## Overview
-This system demonstrates production-grade agentic architecture for transforming structured product data into multiple content page formats (FAQ, Product Description, Comparison) with machine-readable JSON outputs.
+A lightweight multi-agent pipeline that parses product data, generates questions, composes answers, and assembles exportable JSON pages using reusable content blocks and templates.
 
-## Architecture
-- **Modular Agents**: Each agent has single responsibility with clear input/output contracts
-- **Orchestration**: Pipeline-based workflow coordinating multiple agents
-- **Content Logic Blocks**: Reusable transformation functions
-- **Template Engine**: Structured page generation system
+## Features
+- 🤖 **Multi-agent architecture** with clear responsibilities
+- 🔄 **Pipeline orchestration** coordinating specialized agents
+- 🧩 **Reusable content blocks** for transformations
+- 📄 **Template-based generation** (FAQ, Product, Comparison)
+- 📊 **Machine-readable JSON outputs**
+- 🌐 **Web interface** for easy interaction
+- 🚀 **Vercel-ready** serverless deployment
+- 🐍 **Pure Python** (no external dependencies)
 
-## Project Structure
-```
-├── agents/              # Individual agent implementations
-│   ├── data_parser_agent.py
-│   ├── question_generation_agent.py
-│   ├── faq_generation_agent.py
-│   └── content_assembly_agent.py
-├── blocks/              # Reusable content logic blocks
-│   └── content_blocks.py
-├── templates/           # Page templates
-│   └── template_engine.py
-├── models/              # Data models and schemas
-│   └── product.py
-├── orchestrator/        # Workflow orchestration
-│   └── workflow.py
-├── outputs/             # Generated JSON files
-│   ├── faq.json
-│   ├── product_page.json
-│   └── comparison_page.json
-├── docs/                # Documentation
-│   └── projectdocumentation.md
-├── input_data.json      # Sample input data
-├── main.py              # Entry point
-├── test_system.py       # Test suite
-└── requirements.txt     # Dependencies
-```
+## Live Demo
+
+Visit the web interface to generate content:
+1. Paste your product JSON data
+2. Click "Generate Content"
+3. Download the generated FAQ, Product, and Comparison pages
 
 ## Quick Start
 
-### Prerequisites
-- Python 3.8 or higher
-- No external dependencies (uses Python standard library only)
+### Option 1: Web Interface (Recommended)
 
-### Installation
+Deploy to Vercel:
+
 ```bash
-# Clone the repository
-git clone https://github.com/rogerdemello/kasparro-ai-agentic-content-generation-system-roger-demello.git
-cd kasparro-ai-agentic-content-generation-system-roger-demello
+# Install Vercel CLI
+npm i -g vercel
 
-# No pip install needed - uses standard library only
+# Deploy
+vercel
 ```
 
-### Running the System
+Then open the deployed URL and use the web interface.
+
+### Option 2: Command Line
+
 ```bash
-# Run the complete pipeline
+# Run the pipeline locally
 python main.py
 
 # Run tests
 python test_system.py
 ```
 
-### Output
-The system generates three JSON files in the `outputs/` directory:
-- **faq.json**: FAQ page with 16 Q&As across 6 categories
-- **product_page.json**: Complete product page with 6 sections
-- **comparison_page.json**: Side-by-side product comparison
+### Option 3: API Endpoint
 
-## System Components
+```bash
+# Start local development server
+vercel dev
 
-### Agents
-1. **DataParserAgent**: Parses and validates product JSON
-2. **QuestionGenerationAgent**: Generates 15+ categorized questions
-3. **FAQGenerationAgent**: Generates answers from product data
-4. **ContentAssemblyAgent**: Assembles pages using templates
+# Make API request
+curl -X POST http://localhost:3000/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"product_a": {...}}'
+```
 
-### Content Blocks
-9 reusable transformation functions for generating structured content:
-- Benefits, Usage, Safety, Ingredients, Pricing
-- Overview, Comparisons (ingredients, benefits, pricing)
+## Project Structure
 
-### Templates
-- **FAQTemplate**: Structured FAQ with categories
-- **ProductPageTemplate**: Multi-section product page
-- **ComparisonPageTemplate**: Product comparison
+```
+├── api/                 # Vercel serverless functions
+│   └── generate.py      # API endpoint for content generation
+├── public/              # Frontend web interface
+│   └── index.html       # Web UI
+├── agents/              # Agent implementations
+│   ├── data_parser_agent.py
+│   ├── question_generation_agent.py
+│   ├── faq_generation_agent.py
+│   └── content_assembly_agent.py
+├── blocks/              # Reusable content logic
+├── templates/           # Page templates
+├── models/              # Data models
+├── orchestrator/        # Workflow orchestration
+├── outputs/             # Generated JSON files
+└── docs/                # Documentation
+```
 
-## Testing
+## API Reference
+
+### POST /api/generate
+
+Generate content from product data.
+
+**Request Body:**
+```json
+{
+  "product_a": {
+    "product_name": "GlowBoost Vitamin C Serum",
+    "concentration": "10% Vitamin C",
+    "suitable_for": "Oily, Combination",
+    "key_ingredients": ["Vitamin C", "Hyaluronic Acid"],
+    "benefits": ["Brightening", "Fades dark spots"],
+    "how_to_use": "Apply 2–3 drops in the morning",
+    "side_effects": "Mild tingling for sensitive skin",
+    "price": "₹699"
+  },
+  "product_b": { /* optional for comparison */ }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "outputs": {
+    "faq": { /* FAQ page JSON */ },
+    "product": { /* Product page JSON */ },
+    "comparison": { /* Comparison page JSON (if product_b provided) */ }
+  },
+  "agents_executed": ["DataParserAgent", "QuestionGenerationAgent", ...]
+}
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import the repository in Vercel
+3. Deploy (no configuration needed)
+
+Or use the CLI:
+```bash
+vercel --prod
+```
+
+### Manual Deployment
+
+The project includes:
+- `vercel.json` - Vercel configuration
+- `api/generate.py` - Serverless function
+- `public/index.html` - Static frontend
+- `requirements.txt` - Python dependencies (none required)
+
+## Development
+
+### Run locally
+```bash
+# Backend only
+python main.py
+
+# With Vercel dev server (includes frontend + API)
+vercel dev
+```
+
+### Run tests
 ```bash
 python test_system.py
 ```
 
-Tests validate:
-- Agent functionality and outputs
-- JSON structure and validity
-- Content completeness
-- System integration
+### Code quality
+```bash
+# Install pre-commit hooks
+pip install pre-commit
+pre-commit install
 
-## Documentation
-See `docs/projectdocumentation.md` for:
-- Problem statement and solution overview
-- Detailed system design and architecture
-- Agent boundaries and responsibilities
-- Data flow and orchestration patterns
-- Design decisions and trade-offs
+# Run manually
+pre-commit run --all-files
+```
 
-## Features
-✅ Modular multi-agent architecture  
-✅ Pipeline-based orchestration  
-✅ 16 categorized questions generated  
-✅ 3 page types (FAQ, Product, Comparison)  
-✅ Machine-readable JSON output  
-✅ Reusable content logic blocks  
-✅ Template-based generation  
-✅ Zero external dependencies  
-✅ Comprehensive test suite  
+## Architecture
+
+Multi-agent pipeline with specialized roles:
+
+1. **DataParserAgent** - Parses and validates product JSON
+2. **QuestionGenerationAgent** - Generates 15+ categorized questions
+3. **FAQGenerationAgent** - Generates answers from product data
+4. **ContentAssemblyAgent** - Assembles pages using templates
+
+See [docs/projectdocumentation.md](docs/projectdocumentation.md) for detailed architecture.
+
+## Contributing
+
+Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
-This is an assignment project for Kasparro AI Engineer Challenge.
+
+MIT License — see [LICENSE](LICENSE)

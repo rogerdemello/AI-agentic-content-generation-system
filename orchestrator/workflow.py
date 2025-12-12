@@ -129,6 +129,57 @@ class WorkflowOrchestrator:
                 json.dump(outputs["comparison"], f, indent=2, ensure_ascii=False)
             print(f"[{self.name}] Saved: {comparison_path}")
     
+    def execute_pipeline_from_data(self, product_a_data: Dict, product_b_data: Dict = None) -> Dict[str, any]:
+        """
+        Execute the complete workflow pipeline from data dictionaries
+        
+        Args:
+            product_a_data: Product A data dictionary
+            product_b_data: Optional data for Product B (for comparison)
+            
+        Returns:
+            Dictionary containing all generated outputs
+        """
+        results = {
+            "workflow": "Multi-Agent Content Generation Pipeline",
+            "agents_executed": [],
+            "outputs": {}
+        }
+        
+        # Step 1: Parse product data
+        product_a = Product.from_dict(product_a_data)
+        results["agents_executed"].append(self.data_parser.name)
+        self.workflow_state["product_a"] = product_a
+        
+        # Step 2: Generate questions
+        questions = self.question_generator.generate_questions(product_a)
+        results["agents_executed"].append(self.question_generator.name)
+        self.workflow_state["questions"] = questions
+        
+        # Step 3: Generate FAQ answers
+        answers = self.faq_generator.generate_answers(product_a, questions)
+        results["agents_executed"].append(self.faq_generator.name)
+        self.workflow_state["answers"] = answers
+        
+        # Step 4: Assemble FAQ page
+        faq_page = self.content_assembler.assemble_faq_page(product_a, questions, answers)
+        results["outputs"]["faq"] = faq_page
+        
+        # Step 5: Assemble Product page
+        product_page = self.content_assembler.assemble_product_page(product_a)
+        results["outputs"]["product"] = product_page
+        
+        # Step 6: Assemble Comparison page (if Product B data provided)
+        if product_b_data:
+            product_b = Product.from_dict(product_b_data)
+            self.workflow_state["product_b"] = product_b
+            comparison_page = self.content_assembler.assemble_comparison_page(product_a, product_b)
+            results["outputs"]["comparison"] = comparison_page
+        
+        results["agents_executed"].append(self.content_assembler.name)
+        
+        return results
+    
     def get_workflow_state(self) -> Dict:
         """Get current workflow state"""
         return {

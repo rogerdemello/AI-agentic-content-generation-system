@@ -143,7 +143,8 @@ def test_json_outputs():
     if not os.path.exists(output_dir) or not os.listdir(output_dir):
         print("  Generating outputs first...")
         orchestrator = WorkflowOrchestrator()
-        orchestrator.execute_pipeline("input_data.json")
+        results = orchestrator.execute_pipeline("input_data.json")
+        orchestrator.save_outputs(results)
     
     required_files = ["faq.json", "product_page.json", "comparison_page.json"]
     

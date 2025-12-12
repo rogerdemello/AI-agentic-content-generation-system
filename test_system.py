@@ -138,7 +138,13 @@ def test_json_outputs():
     """Test that generated JSON files are valid"""
     print("Testing JSON output files...")
     
+    # Generate outputs first if they don't exist
     output_dir = "outputs"
+    if not os.path.exists(output_dir) or not os.listdir(output_dir):
+        print("  Generating outputs first...")
+        orchestrator = WorkflowOrchestrator()
+        orchestrator.execute_pipeline("input_data.json")
+    
     required_files = ["faq.json", "product_page.json", "comparison_page.json"]
     
     for filename in required_files:

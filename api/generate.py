@@ -15,6 +15,29 @@ from http.server import BaseHTTPRequestHandler
 class handler(BaseHTTPRequestHandler):
     """Vercel serverless handler for content generation API"""
     
+    def do_GET(self):
+        """Serve a simple frontend for local testing or respond to favicon requests"""
+        # Serve the public/index.html on root requests to make local testing easier
+        if self.path in ('/', '/index.html'):
+            try:
+                index_path = os.path.join(os.path.dirname(__file__), '..', 'public', 'index.html')
+                with open(index_path, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(content)
+            except Exception:
+                self.send_response(500)
+                self.end_headers()
+        elif self.path == '/favicon.ico':
+            self.send_response(204)
+            self.end_headers()
+        else:
+            # For other GET paths, return 404
+            self.send_response(404)
+            self.end_headers()
+
     def do_POST(self):
         """Handle POST request with product data"""
         try:

@@ -1,183 +1,121 @@
-# Agentic Content Generator
+# AI Agentic Content Generation System
 
-A modular, agent-based system that generates structured content (FAQ, product pages, and comparisons) from product JSON data.
+Automated product content generator using a multi-agent pipeline. Takes JSON product data and outputs FAQ pages, product descriptions, and comparison tables.
 
-## Overview
-A lightweight multi-agent pipeline that parses product data, generates questions, composes answers, and assembles exportable JSON pages using reusable content blocks and templates.
+Built with pure Python (no external dependencies).
 
-## Features
-- 🤖 **Multi-agent architecture** with clear responsibilities
-- 🔄 **Pipeline orchestration** coordinating specialized agents
-- 🧩 **Reusable content blocks** for transformations
-- 📄 **Template-based generation** (FAQ, Product, Comparison)
-- 📊 **Machine-readable JSON outputs**
-- 🌐 **Web interface** for easy interaction
-- 🚀 **Vercel-ready** serverless deployment
-- 🐍 **Pure Python** (no external dependencies)
+## What it does
 
-## Live Demo
+- Parses product JSON and generates FAQ/product/comparison pages
+- Four agents handle parsing, question generation, answers, and assembly
+- Web UI for quick testing (paste JSON, get results)
+- REST API at `/api/generate`
+- Deploys to Vercel with no config
 
-Visit the web interface to generate content:
-1. Paste your product JSON data
-2. Click "Generate Content"
-3. Download the generated FAQ, Product, and Comparison pages
-
-## Quick Start
-
-### Option 1: Web Interface (Recommended)
-
-Deploy to Vercel:
+## Usage
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-Then open the deployed URL and use the web interface.
-
-### Option 2: Command Line
-
-```bash
-# Run the pipeline locally
+# Run the pipeline
 python main.py
 
-# Run tests
+# Tests
 python test_system.py
+
+# Start dev server
+python run_local.py
 ```
 
-### Option 3: API Endpoint
+Or call it from code:
 
-```bash
-# Start local development server
-vercel dev
+```python
+from orchestrator.workflow import WorkflowOrchestrator
 
-# Make API request
-curl -X POST http://localhost:3000/api/generate \
-  -H "Content-Type: application/json" \
-  -d '{"product_a": {...}}'
-```
-
-## Project Structure
-
-```
-├── api/                 # Vercel serverless functions
-│   └── generate.py      # API endpoint for content generation
-├── public/              # Frontend web interface
-│   └── index.html       # Web UI
-├── agents/              # Agent implementations
-│   ├── data_parser_agent.py
-│   ├── question_generation_agent.py
-│   ├── faq_generation_agent.py
-│   └── content_assembly_agent.py
-├── blocks/              # Reusable content logic
-├── templates/           # Page templates
-├── models/              # Data models
-├── orchestrator/        # Workflow orchestration
-├── outputs/             # Generated JSON files
-└── docs/                # Documentation
-```
-
-## API Reference
-
-### POST /api/generate
-
-Generate content from product data.
-
-**Request Body:**
-```json
-{
-  "product_a": {
+result = WorkflowOrchestrator().execute_pipeline_from_data({
     "product_name": "GlowBoost Vitamin C Serum",
     "concentration": "10% Vitamin C",
     "suitable_for": "Oily, Combination",
     "key_ingredients": ["Vitamin C", "Hyaluronic Acid"],
     "benefits": ["Brightening", "Fades dark spots"],
-    "how_to_use": "Apply 2–3 drops in the morning",
-    "side_effects": "Mild tingling for sensitive skin",
+    "how_to_use": "Apply 2-3 drops morning and evening",
+    "side_effects": "Mild tingling possible",
     "price": "₹699"
+})
+```
+
+Deploy:
+```bash
+vercel
+```
+
+## Project Structure
+
+```
+├── agents/              # Four agent implementations
+├── blocks/              # Reusable content transformations
+├── templates/           # Page templates (FAQ, Product, Comparison)
+├── models/              # Product data model
+├── orchestrator/        # Pipeline coordinator
+├── api/                 # Serverless endpoint
+├── public/              # Web interface
+├── main.py              # CLI entry point
+└── test_system.py       # Test suite
+```
+
+## How it works
+
+1. DataParserAgent validates the input
+2. QuestionGenerationAgent creates 15+ questions
+3. FAQGenerationAgent generates answers
+4. ContentAssemblyAgent builds the final pages
+
+Outputs: `faq.json`, `product_page.json`, `comparison_page.json`
+
+More details in `docs/projectdocumentation.md`.
+
+## API Reference
+
+**POST /api/generate**
+
+Request body:
+```json
+{
+  "product_a": {
+    "product_name": "...",
+    "concentration": "...",
+    "suitable_for": "...",
+    "key_ingredients": [...],
+    "benefits": [...],
+    "how_to_use": "...",
+    "side_effects": "...",
+    "price": "..."
   },
-  "product_b": { /* optional for comparison */ }
+  "product_b": { ... }
 }
 ```
 
-**Response:**
+Response:
 ```json
 {
   "success": true,
   "outputs": {
-    "faq": { /* FAQ page JSON */ },
-    "product": { /* Product page JSON */ },
-    "comparison": { /* Comparison page JSON (if product_b provided) */ }
-  },
-  "agents_executed": ["DataParserAgent", "QuestionGenerationAgent", ...]
+    "faq": { ... },
+    "product": { ... },
+    "comparison": { ... }
+  }
 }
 ```
 
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import the repository in Vercel
-3. Deploy (no configuration needed)
-
-Or use the CLI:
-```bash
-vercel --prod
-```
-
-### Manual Deployment
-
-The project includes:
-- `vercel.json` - Vercel configuration
-- `api/generate.py` - Serverless function
-- `public/index.html` - Static frontend
-- `requirements.txt` - Python dependencies (none required)
-
 ## Development
 
-### Run locally
 ```bash
-# Backend only
-python main.py
-
-# With Vercel dev server (includes frontend + API)
-vercel dev
-```
-
-### Run tests
-```bash
-python test_system.py
-```
-
-### Code quality
-```bash
-# Install pre-commit hooks
+# Install pre-commit hooks (optional)
 pip install pre-commit
 pre-commit install
 
-# Run manually
+# Run code quality checks
 pre-commit run --all-files
 ```
 
-## Architecture
-
-Multi-agent pipeline with specialized roles:
-
-1. **DataParserAgent** - Parses and validates product JSON
-2. **QuestionGenerationAgent** - Generates 15+ categorized questions
-3. **FAQGenerationAgent** - Generates answers from product data
-4. **ContentAssemblyAgent** - Assembles pages using templates
-
-See [docs/projectdocumentation.md](docs/projectdocumentation.md) for detailed architecture.
-
-## Contributing
-
-Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+MIT

@@ -5,6 +5,20 @@ from typing import List, Dict
 from models.product import Product
 
 
+def _is_valid_value(value: str) -> bool:
+    if value is None:
+        return False
+    try:
+        s = str(value).strip()
+    except Exception:
+        return False
+    if s == "":
+        return False
+    if s.lower() in ("n/a", "na", "none", "null"):
+        return False
+    return True
+
+
 def generate_benefits_block(product: Product) -> Dict[str, any]:
     """
     Generate benefits content block
@@ -165,10 +179,20 @@ def generate_overview_block(product: Product) -> Dict[str, str]:
     Returns:
         Dictionary with overview information
     """
-    return {
+    key_spec = product.concentration if _is_valid_value(product.concentration) else None
+    if key_spec:
+        summary = f"{product.product_name} with {key_spec} is {product.suitable_for}"
+    else:
+        summary = f"{product.product_name} is {product.suitable_for}"
+
+    result = {
         "title": "Product Overview",
         "name": product.product_name,
-        "key_spec": product.concentration,
         "suitability": product.suitable_for,
-        "summary": f"{product.product_name} with {product.concentration} is {product.suitable_for}"
+        "summary": summary
     }
+
+    if key_spec:
+        result["key_spec"] = key_spec
+
+    return result
